@@ -1,0 +1,17 @@
+{
+    "name": "task-bot",
+    "version": "1.0.0",
+    "description": "A Telegram bot for task management with Node.js and MongoDB",
+    "main": "vercel.js",
+    "dependencies": {
+        "dotenv": "^16.3.1",
+        "mongodb": "^3.7.4",
+        "node-telegram-bot-api": "^0.53.0"
+    },
+    "scripts": {
+        "start": "node vercel.js"
+    },
+    "engines": {
+        "node": "18.x"
+    }
+}
