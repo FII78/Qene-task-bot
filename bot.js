@@ -29,7 +29,7 @@ async function initializeMongoDB() {
 // Initialize telegram bot with Webhook
 const bot = new TelegramBot(process.env.YOUR_BOT_TOKEN);
 
-bot.setWebHook('https://task-bot-j33l.vercel.app/webhook');
+bot.setWebHook('https://qene-task-bot.vercel.app/webhook');
 
 bot.on('webhook_error', (error) => {
     console.error('Webhook error:', error);
