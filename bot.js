@@ -53,7 +53,23 @@ module.exports = async (req, res) => {
         case  '/start':
             bot.sendMessage(chatId, 'Welcome to your task management bot! What would you like to do?');
             break;
-        
+
+        case '/create':
+            const taskText = text.replace('/create', '').trim();
+            try {
+                const result = await tasksCollection.insertOne({ text: taskText, done: false });
+                if (result.insertedCount === 1) {
+                bot.sendMessage(chatId, 'Task created successfully.');
+                } 
+                else {
+                bot.sendMessage(chatId, 'Failed to create task. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error creating task:', error);
+                bot.sendMessage(chatId, 'Failed to create task. Please try again later.');
+            }
+            break;
+
         default:
             bot.sendMessage(data.message.chat.id, 'I do not understand that command. Please use /start, /create, /list, or /done.');
         }
