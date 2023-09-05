@@ -70,6 +70,24 @@ module.exports = async (req, res) => {
             }
             break;
 
+        case '/list':
+            try {
+                const tasks = await tasksCollection.find({}).toArray();
+                if (tasks.length === 0) {
+                bot.sendMessage(chatId, 'You have no tasks.');
+                } 
+                else {
+                const taskList = tasks.map((task, index) => {
+                    return `${index + 1}. [${task.done ? 'Done' : 'Not Done'}] ${task.text}`;
+                }).join('\n');
+                bot.sendMessage(chatId, `Task List:\n${taskList}`);
+                }
+            } catch (error) {
+                console.error('Error fetching tasks:', error);
+                bot.sendMessage(chatId, 'Failed to fetch your tasks. Please try again later.');
+            }
+            break;
+              
         default:
             bot.sendMessage(data.message.chat.id, 'I do not understand that command. Please use /start, /create, /list, or /done.');
         }
