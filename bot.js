@@ -47,13 +47,16 @@ module.exports = async (req, res) => {
       const command = updateType.split(' ')[0];
       
       const tasksCollection = await initializeMongoDB();
-  
+    
+    // Switch command to handle the commands
     switch (command) 
         {
+        // /start command
         case  '/start':
             bot.sendMessage(chatId, 'Welcome to your task management bot! What would you like to do?');
             break;
-
+        
+        // Creating a new task using a description of a single task
         case '/create':
             const taskText = text.replace('/create', '').trim();
             try {
@@ -69,7 +72,8 @@ module.exports = async (req, res) => {
                 bot.sendMessage(chatId, 'Failed to create task. Please try again later.');
             }
             break;
-
+        
+        // List all the tasks created so far
         case '/list':
             try {
                 const tasks = await tasksCollection.find({}).toArray();
@@ -87,7 +91,8 @@ module.exports = async (req, res) => {
                 bot.sendMessage(chatId, 'Failed to fetch your tasks. Please try again later.');
             }
             break;
-            
+        
+        // Mark a single task as done using it's task number    
         case '/done':
             const taskIndex = parseInt(text.replace('/done', '').trim()) - 1;
             if (!isNaN(taskIndex)) {
