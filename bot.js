@@ -87,7 +87,31 @@ module.exports = async (req, res) => {
                 bot.sendMessage(chatId, 'Failed to fetch your tasks. Please try again later.');
             }
             break;
-              
+            
+        case '/done':
+            const taskIndex = parseInt(text.replace('/done', '').trim()) - 1;
+            if (!isNaN(taskIndex)) {
+                try {
+                const tasks = await tasksCollection.find({}).toArray();
+                if (taskIndex >= 0 && taskIndex < tasks.length) {
+                    const taskId = tasks[taskIndex]._id;
+                    const result = await tasksCollection.updateOne({ _id: taskId }, { $set: { done: true } });
+                    if (result.modifiedCount === 1) {
+                    bot.sendMessage(chatId, 'Task marked as done.');
+                    } else {
+                    bot.sendMessage(chatId, 'Failed to mark task as done.');
+                    }
+                } else {
+                    bot.sendMessage(chatId, 'Invalid task index. Use /done <task number>.');
+                }
+                } catch (error) {
+                console.error('Error marking task as done:', error);
+                bot.sendMessage(chatId, 'Failed to mark task as done. Please try again later.');
+                }
+            } else {
+                bot.sendMessage(chatId, 'Invalid task index. Use /done <task number>.');
+            }
+            break;
         default:
             bot.sendMessage(data.message.chat.id, 'I do not understand that command. Please use /start, /create, /list, or /done.');
         }
